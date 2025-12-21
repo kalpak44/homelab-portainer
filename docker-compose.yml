@@ -8,6 +8,10 @@ services:
       POSTGRESQL_USERNAME: admin
       POSTGRESQL_PASSWORD: admin
       POSTGRESQL_DATABASE: root
+      POSTGRESQL_POSTGRES_PASSWORD: admin
+      POSTGRESQL_ENABLE_REMOTE_CONNECTIONS: "yes"
+    ports:
+      - "5432:5432"
     volumes:
       - /home/kalpak44/postgres-data:/bitnami/postgresql
 
