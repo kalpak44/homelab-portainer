@@ -21,6 +21,7 @@ services:
     environment:
       PGADMIN_DEFAULT_EMAIL: admin@admin.com
       PGADMIN_DEFAULT_PASSWORD: admin
+      PGADMIN_CONFIG_SERVER_MODE: "False"
       PGADMIN_REPLACE_SERVERS_ON_STARTUP: "True"
       PGADMIN_SERVER_JSON_FILE: /pgadmin/servers.json
     volumes:
