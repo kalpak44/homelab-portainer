@@ -32,11 +32,12 @@ services:
   pgadmin-init:
     image: curlimages/curl:latest
     restart: "no"
+    user: root
     depends_on:
       - postgres
     volumes:
       - pgadmin_data:/data
-    command: ["sh","-c","mkdir -p /data/pgadmin4 && curl -fsSL https://raw.githubusercontent.com/kalpak44/homelab-portainer/main/pgadmin/servers.json -o /data/pgadmin4/servers.json && curl -fsSL https://raw.githubusercontent.com/kalpak44/homelab-portainer/main/pgadmin/pgpass -o /data/pgpass && chmod 600 /data/pgpass"]
+    command: ["sh","-c","mkdir -p /data/pgadmin4 && curl -fsSL https://raw.githubusercontent.com/kalpak44/homelab-portainer/main/pgadmin/servers.json -o /data/pgadmin4/servers.json && curl -fsSL https://raw.githubusercontent.com/kalpak44/homelab-portainer/main/pgadmin/pgpass -o /data/pgpass && chmod 600 /data/pgpass && chown -R 5050:5050 /data"]
 
 volumes:
   postgres_data:
