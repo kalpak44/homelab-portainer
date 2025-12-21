@@ -12,7 +12,7 @@ services:
       - POSTGRESQL_PASSWORD=admin
       - POSTGRESQL_DATABASE=root
     volumes:
-      - /home/kalpak44/postgres-data:/bitnami/postgresql
+      - postgres_data:/bitnami/postgresql
 
   pgadmin:
     image: dpage/pgadmin4:latest
@@ -25,7 +25,19 @@ services:
       - PGADMIN_DEFAULT_PASSWORD=admin
       - PGADMIN_CONFIG_SERVER_MODE=False
     volumes:
-      - ./pgadmin/servers.json:/pgadmin4/servers.json:ro
-      - ./pgadmin/pgpass:/pgpass:ro
+      - pgadmin_data:/var/lib/pgadmin
     depends_on:
       - postgres
+
+  pgadmin-init:
+    image: curlimages/curl:latest
+    restart: "no"
+    depends_on:
+      - postgres
+    volumes:
+      - pgadmin_data:/data
+    command: ["sh","-c","mkdir -p /data/pgadmin4 && curl -fsSL https://raw.githubusercontent.com/kalpak44/homelab-portainer/main/pgadmin/servers.json -o /data/pgadmin4/servers.json && curl -fsSL https://raw.githubusercontent.com/kalpak44/homelab-portainer/main/pgadmin/pgpass -o /data/pgpass && chmod 600 /data/pgpass"]
+
+volumes:
+  postgres_data:
+  pgadmin_data:
