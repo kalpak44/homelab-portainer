@@ -9,52 +9,17 @@ services:
       POSTGRESQL_PASSWORD: admin
       POSTGRESQL_DATABASE: root
     volumes:
-      - postgres_data:/bitnami/postgresql
+      - /home/kalpak44/postgres-data:/bitnami/postgresql
 
   pgadmin:
     image: dpage/pgadmin4:latest
     restart: unless-stopped
     ports:
       - "9001:80"
-    depends_on:
-      - postgres
     environment:
       PGADMIN_DEFAULT_EMAIL: admin@admin.com
       PGADMIN_DEFAULT_PASSWORD: admin
-      PGADMIN_CONFIG_SERVER_MODE: "False"
-      PGADMIN_REPLACE_SERVERS_ON_STARTUP: "True"
-      PGADMIN_SERVER_JSON_FILE: /var/lib/pgadmin/servers.json
     volumes:
-      - pgadmin_data:/var/lib/pgadmin
-    entrypoint:
-      - /bin/sh
-      - -c
-      - |
-        printf '%s\n' \
-        '{' \
-        '  "Servers": {' \
-        '    "1": {' \
-        '      "Name": "Local PostgreSQL",' \
-        '      "Group": "Servers",' \
-        '      "Host": "postgres",' \
-        '      "Port": 5432,' \
-        '      "MaintenanceDB": "root",' \
-        '      "Username": "admin",' \
-        '      "SSLMode": "prefer",' \
-        '      "PassFile": "/var/lib/pgadmin/pgpass"' \
-        '    }' \
-        '  }' \
-        '}' \
-        > /var/lib/pgadmin/servers.json
-
-        printf '%s\n' \
-        'postgres:5432:root:admin:admin' \
-        > /var/lib/pgadmin/pgpass
-
-        chmod 600 /var/lib/pgadmin/pgpass
-
-        exec /entrypoint.sh
-
-volumes:
-  postgres_data:
-  pgadmin_data:
+      - /home/kalpak44/pgadmin-data:/var/lib/pgadmin
+    depends_on:
+      - postgres
