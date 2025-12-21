@@ -3,32 +3,56 @@ version: "3.8"
 services:
   postgres:
     image: bitnami/postgresql:latest
+    container_name: postgres
     restart: unless-stopped
     environment:
       POSTGRESQL_USERNAME: admin
       POSTGRESQL_PASSWORD: admin
       POSTGRESQL_DATABASE: root
-    ports:
-      - "5432:5432"
     volumes:
       - postgres_data:/bitnami/postgresql
 
   pgadmin:
     image: dpage/pgadmin4:latest
+    container_name: pgadmin
     restart: unless-stopped
     ports:
       - "9001:80"
+    depends_on:
+      - postgres
     environment:
       PGADMIN_DEFAULT_EMAIL: admin@admin.com
       PGADMIN_DEFAULT_PASSWORD: admin
       PGADMIN_CONFIG_SERVER_MODE: "False"
       PGADMIN_REPLACE_SERVERS_ON_STARTUP: "True"
-      PGADMIN_SERVER_JSON_FILE: /pgadmin/servers.json
     volumes:
       - pgadmin_data:/var/lib/pgadmin
-      - ./pgadmin:/pgadmin:ro
-    depends_on:
-      - postgres
+    entrypoint: >
+      /bin/sh -c "
+      mkdir -p /pgadmin4 &&
+      cat > /pgadmin4/servers.json << 'EOF'
+      {
+        \"Servers\": {
+          \"1\": {
+            \"Name\": \"Local PostgreSQL\",
+            \"Group\": \"Servers\",
+            \"Host\": \"postgres\",
+            \"Port\": 5432,
+            \"MaintenanceDB\": \"root\",
+            \"Username\": \"admin\",
+            \"SSLMode\": \"prefer\"
+          }
+        }
+      }
+      EOF
+      &&
+      cat > /pgpass << 'EOF'
+      postgres:5432:root:admin:admin
+      EOF
+      &&
+      chmod 600 /pgpass &&
+      exec /entrypoint.sh
+      "
 
 volumes:
   postgres_data:
