@@ -1,6 +1,7 @@
 version: "3.8"
 
 services:
+  # PostgreSQL database server
   postgres:
     image: bitnami/postgresql:latest
     restart: unless-stopped
@@ -15,6 +16,7 @@ services:
     volumes:
       - /home/kalpak44/postgres-data:/bitnami/postgresql
 
+  # Web-based PostgreSQL administration UI
   pgadmin:
     image: dpage/pgadmin4:latest
     restart: unless-stopped
@@ -27,3 +29,16 @@ services:
       - /home/kalpak44/pgadmin-data:/var/lib/pgadmin
     depends_on:
       - postgres
+
+  # Network-wide DNS ad and tracker blocking service
+  adguardhome:
+    image: adguard/adguardhome:latest
+    container_name: adguardhome
+    restart: always
+    ports:
+      - "53:53/tcp"
+      - "53:53/udp"
+      - "8082:80/tcp"
+    volumes:
+      - /home/kalpak44/adguardhome/config:/opt/adguardhome/conf
+      - /home/kalpak44/adguardhome/work:/opt/adguardhome/work
