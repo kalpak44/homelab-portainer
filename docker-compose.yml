@@ -3,7 +3,6 @@ version: "3.8"
 services:
   postgres:
     image: bitnami/postgresql:latest
-    container_name: postgres
     restart: unless-stopped
     environment:
       POSTGRESQL_USERNAME: admin
@@ -14,7 +13,6 @@ services:
 
   pgadmin:
     image: dpage/pgadmin4:latest
-    container_name: pgadmin
     restart: unless-stopped
     ports:
       - "9001:80"
@@ -28,32 +26,34 @@ services:
       PGADMIN_SERVER_JSON_FILE: /var/lib/pgadmin/servers.json
     volumes:
       - pgadmin_data:/var/lib/pgadmin
-    entrypoint: >
-      /bin/sh -c "
-      cat > /var/lib/pgadmin/servers.json << 'EOF'
-      {
-        \"Servers\": {
-          \"1\": {
-            \"Name\": \"Local PostgreSQL\",
-            \"Group\": \"Servers\",
-            \"Host\": \"postgres\",
-            \"Port\": 5432,
-            \"MaintenanceDB\": \"root\",
-            \"Username\": \"admin\",
-            \"SSLMode\": \"prefer\",
-            \"PassFile\": \"/var/lib/pgadmin/pgpass\"
-          }
-        }
-      }
-      EOF
-      &&
-      cat > /var/lib/pgadmin/pgpass << 'EOF'
-      postgres:5432:root:admin:admin
-      EOF
-      &&
-      chmod 600 /var/lib/pgadmin/pgpass &&
-      exec /entrypoint.sh
-      "
+    entrypoint:
+      - /bin/sh
+      - -c
+      - |
+        printf '%s\n' \
+        '{' \
+        '  "Servers": {' \
+        '    "1": {' \
+        '      "Name": "Local PostgreSQL",' \
+        '      "Group": "Servers",' \
+        '      "Host": "postgres",' \
+        '      "Port": 5432,' \
+        '      "MaintenanceDB": "root",' \
+        '      "Username": "admin",' \
+        '      "SSLMode": "prefer",' \
+        '      "PassFile": "/var/lib/pgadmin/pgpass"' \
+        '    }' \
+        '  }' \
+        '}' \
+        > /var/lib/pgadmin/servers.json
+
+        printf '%s\n' \
+        'postgres:5432:root:admin:admin' \
+        > /var/lib/pgadmin/pgpass
+
+        chmod 600 /var/lib/pgadmin/pgpass
+
+        exec /entrypoint.sh
 
 volumes:
   postgres_data:
