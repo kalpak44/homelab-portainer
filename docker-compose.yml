@@ -5,12 +5,12 @@ services:
     image: bitnami/postgresql:latest
     container_name: postgres
     restart: unless-stopped
-    ports:
-      - "5432:5432"
     environment:
       - POSTGRESQL_USERNAME=admin
       - POSTGRESQL_PASSWORD=admin
       - POSTGRESQL_DATABASE=root
+    ports:
+      - "5432:5432"
     volumes:
       - postgres_data:/bitnami/postgresql
 
@@ -23,21 +23,16 @@ services:
     environment:
       - PGADMIN_DEFAULT_EMAIL=admin@admin.com
       - PGADMIN_DEFAULT_PASSWORD=admin
-      - PGADMIN_CONFIG_SERVER_MODE=False
+      # ensure servers.json is replaced on each start
+      - PGADMIN_REPLACE_SERVERS_ON_STARTUP=True
+      # points pgAdmin at mounted servers config
+      - PGADMIN_SERVER_JSON_FILE=/pgadmin4/servers.json
     volumes:
       - pgadmin_data:/var/lib/pgadmin
+      - ./servers.json:/pgadmin4/servers.json:ro
+      - ./pgpass:/pgpass:ro
     depends_on:
       - postgres
-
-  pgadmin-init:
-    image: curlimages/curl:latest
-    restart: "no"
-    user: root
-    depends_on:
-      - postgres
-    volumes:
-      - pgadmin_data:/data
-    command: ["sh","-c","mkdir -p /data/pgadmin4 && curl -fsSL https://raw.githubusercontent.com/kalpak44/homelab-portainer/main/pgadmin/servers.json -o /data/pgadmin4/servers.json && curl -fsSL https://raw.githubusercontent.com/kalpak44/homelab-portainer/main/pgadmin/pgpass -o /data/pgpass && chmod 600 /data/pgpass && chown -R 5050:5050 /data"]
 
 volumes:
   postgres_data:

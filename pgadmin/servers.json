@@ -1,14 +1,14 @@
 {
   "Servers": {
-      "1": {
-          "Name": "Local PostgreSQL",
-          "Group": "Servers",
-          "Host": "postgres",
-          "Port": 5432,
-          "MaintenanceDB": "root",
-          "Username": "admin",
-          "PassFile": "/pgpass",
-          "SSLMode": "prefer"
-      }
+    "1": {
+      "Name": "Local PostgreSQL",
+      "Group": "Servers",
+      "Host": "postgres",
+      "Port": 5432,
+      "MaintenanceDB": "root",
+      "Username": "admin",
+      "PassFile": "/pgpass",
+      "SSLMode": "prefer"
+    }
   }
 }
