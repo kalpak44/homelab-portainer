@@ -10,7 +10,7 @@ services:
     environment:
       - POSTGRESQL_USERNAME=admin
       - POSTGRESQL_PASSWORD=admin
-      - POSTGRESQL_DATABASE=appdb
+      - POSTGRESQL_DATABASE=main
     volumes:
       - /home/kalpak44/postgres-data:/bitnami/postgresql
 
