@@ -3,12 +3,11 @@ version: "3.8"
 services:
   postgres:
     image: bitnami/postgresql:latest
-    container_name: postgres
     restart: unless-stopped
     environment:
-      - POSTGRESQL_USERNAME=admin
-      - POSTGRESQL_PASSWORD=admin
-      - POSTGRESQL_DATABASE=root
+      POSTGRESQL_USERNAME: admin
+      POSTGRESQL_PASSWORD: admin
+      POSTGRESQL_DATABASE: root
     ports:
       - "5432:5432"
     volumes:
@@ -16,24 +15,32 @@ services:
 
   pgadmin:
     image: dpage/pgadmin4:latest
-    container_name: pgadmin
     restart: unless-stopped
     ports:
       - "9001:80"
     environment:
-      - PGADMIN_DEFAULT_EMAIL=admin@admin.com
-      - PGADMIN_DEFAULT_PASSWORD=admin
-      # ensure servers.json is replaced on each start
-      - PGADMIN_REPLACE_SERVERS_ON_STARTUP=True
-      # points pgAdmin at mounted servers config
-      - PGADMIN_SERVER_JSON_FILE=/pgadmin4/servers.json
+      PGADMIN_DEFAULT_EMAIL: admin@admin.com
+      PGADMIN_DEFAULT_PASSWORD: admin
+      PGADMIN_REPLACE_SERVERS_ON_STARTUP: "True"
+      PGADMIN_SERVER_JSON_FILE: /pgadmin4/servers.json
     volumes:
       - pgadmin_data:/var/lib/pgadmin
-      - ./servers.json:/pgadmin4/servers.json:ro
-      - ./pgpass:/pgpass:ro
+    configs:
+      - source: pgadmin_servers
+        target: /pgadmin4/servers.json
+        mode: 0444
+      - source: pgadmin_pgpass
+        target: /pgpass
+        mode: 0600
     depends_on:
       - postgres
 
 volumes:
   postgres_data:
   pgadmin_data:
+
+configs:
+  pgadmin_servers:
+    file: ./servers.json
+  pgadmin_pgpass:
+    file: ./pgpass
