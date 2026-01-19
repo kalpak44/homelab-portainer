@@ -1,36 +1,46 @@
 version: "3.8"
 
+secrets:
+  pg_password:
+    external: true
+  pgadmin_password:
+    external: true
+  pgadmin_email:
+    external: true
+
 services:
-  # PostgreSQL database server
   postgres:
     image: bitnami/postgresql:latest
     restart: unless-stopped
     environment:
       POSTGRESQL_USERNAME: admin
-      POSTGRESQL_PASSWORD: admin
+      POSTGRESQL_PASSWORD_FILE: /run/secrets/pg_password
       POSTGRESQL_DATABASE: root
-      POSTGRESQL_POSTGRES_PASSWORD: admin
+      POSTGRESQL_POSTGRES_PASSWORD_FILE: /run/secrets/pg_password
       POSTGRESQL_ENABLE_REMOTE_CONNECTIONS: "yes"
+    secrets:
+      - pg_password
     ports:
       - "5432:5432"
     volumes:
       - /home/kalpak44/postgres-data:/bitnami/postgresql
 
-  # Web-based PostgreSQL administration UI
   pgadmin:
     image: dpage/pgadmin4:latest
     restart: unless-stopped
     ports:
       - "9001:80"
     environment:
-      PGADMIN_DEFAULT_EMAIL: admin@admin.com
-      PGADMIN_DEFAULT_PASSWORD: admin
+      PGADMIN_DEFAULT_EMAIL_FILE: /run/secrets/pgadmin_email
+      PGADMIN_DEFAULT_PASSWORD_FILE: /run/secrets/pgadmin_password
+    secrets:
+      - pgadmin_email
+      - pgadmin_password
     volumes:
       - /home/kalpak44/pgadmin-data:/var/lib/pgadmin
     depends_on:
       - postgres
 
-  # Network-wide DNS ad and tracker blocking service
   adguardhome:
     image: adguard/adguardhome:latest
     container_name: adguardhome
