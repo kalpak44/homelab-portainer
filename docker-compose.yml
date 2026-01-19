@@ -1,25 +1,15 @@
 version: "3.8"
 
-secrets:
-  pg_password:
-    external: true
-  pgadmin_password:
-    external: true
-  pgadmin_email:
-    external: true
-
 services:
   postgres:
     image: bitnami/postgresql:latest
     restart: unless-stopped
     environment:
-      POSTGRESQL_USERNAME: admin
-      POSTGRESQL_PASSWORD_FILE: /run/secrets/pg_password
-      POSTGRESQL_DATABASE: root
-      POSTGRESQL_POSTGRES_PASSWORD_FILE: /run/secrets/pg_password
+      POSTGRESQL_USERNAME: ${POSTGRES_USER}
+      POSTGRESQL_PASSWORD: ${POSTGRES_PASSWORD}
+      POSTGRESQL_DATABASE: ${POSTGRES_DB}
+      POSTGRESQL_POSTGRES_PASSWORD: ${POSTGRES_PASSWORD}
       POSTGRESQL_ENABLE_REMOTE_CONNECTIONS: "yes"
-    secrets:
-      - pg_password
     ports:
       - "5432:5432"
     volumes:
@@ -31,11 +21,8 @@ services:
     ports:
       - "9001:80"
     environment:
-      PGADMIN_DEFAULT_EMAIL_FILE: /run/secrets/pgadmin_email
-      PGADMIN_DEFAULT_PASSWORD_FILE: /run/secrets/pgadmin_password
-    secrets:
-      - pgadmin_email
-      - pgadmin_password
+      PGADMIN_DEFAULT_EMAIL: ${PGADMIN_DEFAULT_EMAIL}
+      PGADMIN_DEFAULT_PASSWORD: ${PGADMIN_DEFAULT_PASSWORD}
     volumes:
       - /home/kalpak44/pgadmin-data:/var/lib/pgadmin
     depends_on:
