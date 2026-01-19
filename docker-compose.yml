@@ -55,26 +55,25 @@ services:
     volumes:
       - /home/kalpak44/vault/data:/vault/data
       - /home/kalpak44/vault/file:/vault/file
-    entrypoint: /bin/sh
-    command: >
-      -ec '
-      mkdir -p /vault/config
+    entrypoint: ["/bin/sh", "-ec"]
+    command:
+      - |
+        mkdir -p /vault/config
 
-      cat > /vault/config/vault.hcl << "EOF"
-      ui = true
+        cat > /vault/config/vault.hcl <<'EOF'
+        ui = true
 
-      storage "file" {
-        path = "/vault/data"
-      }
+        storage "file" {
+          path = "/vault/data"
+        }
 
-      listener "tcp" {
-        address     = "0.0.0.0:8200"
-        tls_disable = 1
-      }
+        listener "tcp" {
+          address     = "0.0.0.0:8200"
+          tls_disable = 1
+        }
 
-      api_addr = "http://192.168.1.50:8200"
-      cluster_addr = "http://192.168.1.50:8201"
-      EOF
+        api_addr = "http://192.168.1.50:8200"
+        cluster_addr = "http://192.168.1.50:8201"
+        EOF
 
-      exec vault server -config=/vault/config/vault.hcl
-      '
+        exec vault server -config=/vault/config/vault.hcl
