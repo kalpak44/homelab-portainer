@@ -5,10 +5,14 @@ services:
     image: bitnami/postgresql:latest
     restart: unless-stopped
     environment:
+      # Your "admin" user for normal work:
       POSTGRESQL_USERNAME: ${POSTGRES_USER}
       POSTGRESQL_PASSWORD: ${POSTGRES_PASSWORD}
       POSTGRESQL_DATABASE: ${POSTGRES_DB}
-      POSTGRESQL_POSTGRES_PASSWORD: ${POSTGRES_PASSWORD}
+
+      # The real postgres superuser password:
+      POSTGRESQL_POSTGRES_PASSWORD: ${POSTGRES_SUPERUSER_PASSWORD}
+
       POSTGRESQL_ENABLE_REMOTE_CONNECTIONS: "yes"
     ports:
       - "5432:5432"
