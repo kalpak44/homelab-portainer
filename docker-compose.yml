@@ -5,14 +5,10 @@ services:
     image: bitnami/postgresql:latest
     restart: unless-stopped
     environment:
-      # Your "admin" user for normal work:
       POSTGRESQL_USERNAME: ${POSTGRES_USER}
       POSTGRESQL_PASSWORD: ${POSTGRES_PASSWORD}
       POSTGRESQL_DATABASE: ${POSTGRES_DB}
-
-      # The real postgres superuser password:
       POSTGRESQL_POSTGRES_PASSWORD: ${POSTGRES_SUPERUSER_PASSWORD}
-
       POSTGRESQL_ENABLE_REMOTE_CONNECTIONS: "yes"
     ports:
       - "5432:5432"
@@ -54,19 +50,17 @@ services:
       - "8200:8200"
       - "8201:8201"
     environment:
-      VAULT_API_ADDR: "http://192.168.1.50:8200"
       VAULT_ADDR: "http://192.168.1.50:8200"
+      VAULT_API_ADDR: "http://192.168.1.50:8200"
     volumes:
       - /home/kalpak44/vault/data:/vault/data
       - /home/kalpak44/vault/file:/vault/file
-    configs:
-      - source: vault_config
-        target: /vault/config/vault.hcl
-    command: vault server -config=/vault/config/vault.hcl
+    entrypoint: /bin/sh
+    command: >
+      -ec '
+      mkdir -p /vault/config
 
-configs:
-  vault_config:
-    content: |
+      cat > /vault/config/vault.hcl << "EOF"
       ui = true
 
       storage "file" {
@@ -80,3 +74,7 @@ configs:
 
       api_addr = "http://192.168.1.50:8200"
       cluster_addr = "http://192.168.1.50:8201"
+      EOF
+
+      exec vault server -config=/vault/config/vault.hcl
+      '
