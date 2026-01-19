@@ -41,6 +41,7 @@ Example `.env` file content:
 POSTGRES_USER=admin
 POSTGRES_PASSWORD=change_me_strong_password
 POSTGRES_DB=root
+POSTGRESQL_POSTGRES_PASSWORD: change_me_strong_password
 
 PGADMIN_DEFAULT_EMAIL=admin@admin.com
 PGADMIN_DEFAULT_PASSWORD=change_me_strong_password
