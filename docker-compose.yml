@@ -43,3 +43,20 @@ services:
     volumes:
       - /home/kalpak44/adguardhome/config:/opt/adguardhome/conf
       - /home/kalpak44/adguardhome/work:/opt/adguardhome/work
+
+  vault:
+    image: hashicorp/vault:1.21.2
+    container_name: vault
+    restart: unless-stopped
+    cap_add:
+      - IPC_LOCK
+    ports:
+      - "8200:8200"
+    environment:
+      VAULT_API_ADDR: ${VAULT_API_ADDR:-http://127.0.0.1:8200}
+      VAULT_ADDR: ${VAULT_ADDR:-http://127.0.0.1:8200}
+    volumes:
+      - ${VAULT_DATA_DIR:-/home/kalpak44/vault/data}:/vault/data
+      - ${VAULT_CONFIG_DIR:-/home/kalpak44/vault/config}:/vault/config
+      - ${VAULT_FILE_DIR:-/home/kalpak44/vault/file}:/vault/file
+    command: vault server -config=/vault/config/vault.hcl
