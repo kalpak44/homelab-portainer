@@ -41,7 +41,7 @@ services:
       - /home/kalpak44/adguardhome/work:/opt/adguardhome/work
 
   vault:
-    image: kalpak44/vault-docker-bootstrap:30b8876
+    image: kalpak44/vault-docker-bootstrap:ada7acc
     container_name: vault
     restart: unless-stopped
     cap_add:
