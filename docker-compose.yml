@@ -53,28 +53,28 @@ services:
       # External reachable addresses (LAN)
       VAULT_API_ADDR: "http://192.168.1.50:8200"
       VAULT_CLUSTER_ADDR: "http://192.168.1.50:8201"
-  
+
       # Enable KV v2 at secret/
       VAULT_ENABLE_KV: "true"
       VAULT_KV_PATH: "secret"
-  
+
       # Write policies included in the image (admin + app-policy)
       VAULT_WRITE_POLICIES: "true"
       VAULT_ADMIN_POLICY_NAME: "admin"
       VAULT_APP_POLICY_NAME: "app-policy"
-  
+
       # UI login (full admin, no warning)
       VAULT_ENABLE_USERPASS: "true"
-      VAULT_UI_ADMIN_USERNAME: "admin"
-      VAULT_UI_ADMIN_PASSWORD: "admin"
+      VAULT_UI_ADMIN_USERNAME: ${VAULT_UI_ADMIN_USERNAME}
+      VAULT_UI_ADMIN_PASSWORD: ${VAULT_UI_ADMIN_PASSWORD}
       VAULT_UI_ADMIN_POLICIES: "admin"
-  
+
       # Optional: AppRole for Kubernetes later (off for now)
       VAULT_ENABLE_APPROLE: "false"
       # VAULT_ENABLE_APPROLE: "true"
       # VAULT_APPROLE_NAME: "k8s-app"
       # VAULT_APPROLE_POLICIES: "app-policy"
-  
+
     volumes:
       - /home/kalpak44/vault/data:/vault/data
       - /home/kalpak44/vault/file:/vault/file
