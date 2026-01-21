@@ -4,6 +4,7 @@ This repo contains a Portainer Stack for:
 - PostgreSQL (bitnami)
 - pgAdmin
 - AdGuard Home
+- Vault (bootstrap image)
 
 ---
 
@@ -45,6 +46,10 @@ POSTGRESQL_POSTGRES_PASSWORD: change_me_strong_password
 
 PGADMIN_DEFAULT_EMAIL=admin@admin.com
 PGADMIN_DEFAULT_PASSWORD=change_me_strong_password
+
+# Vault (Userpass UI admin login)
+VAULT_UI_ADMIN_USERNAME=admin
+VAULT_UI_ADMIN_PASSWORD=change_me_strong_password
 ```
 
 Portainer will inject these values when the stack is deployed.
