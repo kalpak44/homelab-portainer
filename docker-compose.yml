@@ -41,7 +41,7 @@ services:
       - /home/kalpak44/adguardhome/work:/opt/adguardhome/work
 
   vault:
-    image: kalpak44/vault-docker-bootstrap:4a94336
+    image: kalpak44/vault-docker-bootstrap:f30d9dd
     container_name: vault
     restart: unless-stopped
     cap_add:
@@ -53,28 +53,26 @@ services:
       # External reachable addresses (LAN)
       VAULT_API_ADDR: "http://192.168.1.50:8200"
       VAULT_CLUSTER_ADDR: "http://192.168.1.50:8201"
-
+  
       # Enable KV v2 at secret/
       VAULT_ENABLE_KV: "true"
       VAULT_KV_PATH: "secret"
-
-      # Write policies included in the image (admin + app-policy)
+  
+      # Write ALL policies from policies folder
       VAULT_WRITE_POLICIES: "true"
-      VAULT_ADMIN_POLICY_NAME: "admin"
-      VAULT_APP_POLICY_NAME: "app-policy"
-
-      # UI login (full admin, no warning)
+      
+      # UI login
       VAULT_ENABLE_USERPASS: "true"
       VAULT_UI_ADMIN_USERNAME: ${VAULT_UI_ADMIN_USERNAME}
       VAULT_UI_ADMIN_PASSWORD: ${VAULT_UI_ADMIN_PASSWORD}
       VAULT_UI_ADMIN_POLICIES: "admin"
-
-      # Optional: AppRole for Kubernetes later (off for now)
+  
+      # Optional: AppRole for Kubernetes later
       VAULT_ENABLE_APPROLE: "false"
       # VAULT_ENABLE_APPROLE: "true"
       # VAULT_APPROLE_NAME: "k8s-app"
       # VAULT_APPROLE_POLICIES: "app-policy"
-
+  
     volumes:
       - /home/kalpak44/vault/data:/vault/data
       - /home/kalpak44/vault/file:/vault/file
