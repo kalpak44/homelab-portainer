@@ -6,6 +6,11 @@ This repo contains a Portainer Stack for:
 - AdGuard Home
 - Vault (bootstrap image)
 
+Run this one command on the microk8s machine — it will create both files exactly where your Vault container expects them:
+```
+sudo bash -c 'set -e; mkdir -p /home/kalpak44/vault/file; microk8s kubectl config view --raw --minify -o jsonpath="{.clusters[0].cluster.certificate-authority-data}" | base64 -d > /home/kalpak44/vault/file/k8s-ca.crt; SECRET_NAME=$(microk8s kubectl -n kube-system get sa vault-tokenreview -o jsonpath="{.secrets[0].name}"); microk8s kubectl -n kube-system get secret "$SECRET_NAME" -o jsonpath="{.data.token}" | base64 -d > /home/kalpak44/vault/file/tokenreview.jwt; ls -l /home/kalpak44/vault/file/k8s-ca.crt /home/kalpak44/vault/file/tokenreview.jwt'
+
+```
 ---
 
 ## Deploy with Portainer using **Git Repository**
