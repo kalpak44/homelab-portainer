@@ -39,24 +39,26 @@ services:
     volumes:
       - /home/kalpak44/adguardhome/config:/opt/adguardhome/conf
       - /home/kalpak44/adguardhome/work:/opt/adguardhome/work
-
+      
   torrserver:
-    image: yourok/torrserver:latest
+    image: ghcr.io/yourok/torrserver:latest
     container_name: torrserver
+    network_mode: host   # needed for DLNA/multicast
     restart: unless-stopped
     environment:
-      TS_PORT: "8090"
+      TS_PORT: "5665"
+      TS_DONTKILL: "1"
+      TS_HTTPAUTH: "0"
       TS_PATH: /opt/torrserver/config
       TS_LOGPATHDIR: /opt/torrserver/log
       TS_LOGFILE: ts.log
       TS_WEBLOGFILE: tsweb.log
       TS_TORRENTSDIR: /opt/torrserver/torrents
-    ports:
-      - "8090:8090"
     volumes:
       - /home/kalpak44/torrserver/config:/opt/torrserver/config
       - /home/kalpak44/torrserver/log:/opt/torrserver/log
       - /home/kalpak44/torrserver/torrents:/opt/torrserver/torrents
+
 
 
   vault:
