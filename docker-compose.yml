@@ -1,6 +1,16 @@
 version: "3.8"
 
 services:
+  acestream:
+    image: ghcr.io/kalpak44/acestream:latest
+    container_name: acestream
+    restart: unless-stopped
+    environment:
+      SCHEME: http
+      ENTRY: "8000"
+      PORT: "80"
+    ports:
+      - "8000:80"
   postgres:
     image: bitnami/postgresql:latest
     restart: unless-stopped
