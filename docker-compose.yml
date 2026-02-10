@@ -5,6 +5,10 @@ services:
     image: ghcr.io/kalpak44/acestream:a64950f
     container_name: acestream
     restart: unless-stopped
+    deploy:
+      resources:
+        limits:
+          memory: 2G
     environment:
       SCHEME: http
       ENTRY: "5555"
