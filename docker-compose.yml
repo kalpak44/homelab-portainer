@@ -2,7 +2,7 @@ version: "3.8"
 
 services:
   acestream:
-    image: ghcr.io/kalpak44/acestream:latest
+    image: ghcr.io/kalpak44/acestream:a64950f
     container_name: acestream
     restart: unless-stopped
     environment:
