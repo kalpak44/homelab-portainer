@@ -10,7 +10,7 @@ services:
       ENTRY: "2121"
       PORT: "80"
     ports:
-      - "8000:80"
+      - "2121:80"
   postgres:
     image: bitnami/postgresql:latest
     restart: unless-stopped
