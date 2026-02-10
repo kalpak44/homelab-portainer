@@ -7,10 +7,10 @@ services:
     restart: unless-stopped
     environment:
       SCHEME: http
-      ENTRY: "2121"
+      ENTRY: "5555"
       PORT: "80"
     ports:
-      - "2121:80"
+      - "5555:80"
   postgres:
     image: bitnami/postgresql:latest
     restart: unless-stopped
