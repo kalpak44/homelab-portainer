@@ -7,7 +7,7 @@ services:
     restart: unless-stopped
     environment:
       SCHEME: http
-      ENTRY: "8000"
+      ENTRY: "2121"
       PORT: "80"
     ports:
       - "8000:80"
