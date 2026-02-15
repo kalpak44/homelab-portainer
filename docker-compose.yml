@@ -2,10 +2,19 @@ version: "3.8"
 
 services:
   acestream:
-    image: ghcr.io/kalpak44/acestream-engine:f804ddd
+    image: ghcr.io/kalpak44/acestream-engine:f522422
     ports:
       - "6878:6878"
     shm_size: "2gb"
+    command:
+      - --cache-dir
+      - /dev/shm/acecache
+      - --cache-max-bytes
+      - "1610612736"
+      - --cache-auto
+      - "0"
+      - --live-cache-type
+      - memory
     deploy:
       resources:
         limits:
