@@ -2,7 +2,7 @@ version: "3.8"
 
 services:
   acestream:
-    image: ghcr.io/kalpak44/acestream-engine:29ec281
+    image: ghcr.io/kalpak44/acestream-engine:09745f5
     ports:
       - "6878:6878"
     shm_size: "2gb"
